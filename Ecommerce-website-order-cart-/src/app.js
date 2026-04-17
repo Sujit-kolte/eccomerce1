@@ -15,15 +15,13 @@ const prisma = require("./config/db"); // Needed for the debug route
 const app = express();
 
 // --- 🛠️ MIDDLEWARE ---
-const corsOrigin =
-  process.env.CORS_ORIGIN ||
-  (process.env.NODE_ENV === "production" ? "*" : "http://localhost:3000");
+const corsOrigin = process.env.CORS_ORIGIN || "*"; // Allow all origins in production
 console.log(`🔐 CORS enabled for: ${corsOrigin}`);
 
 app.use(
   cors({
-    origin: corsOrigin,
-    credentials: corsOrigin !== "*",
+    origin: true, // Allow all origins
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   }),
 );
