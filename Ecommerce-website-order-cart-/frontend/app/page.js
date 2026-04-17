@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import api from "@/utils/api";
 import ProductCard from "@/components/ProductCard";
 import Link from "next/link";
+// IMPORT: Make sure this path matches your file structure
 
 export default function HomePage() {
   const [products, setProducts] = useState([]);
@@ -15,17 +16,19 @@ export default function HomePage() {
       try {
         const [productsRes, categoriesRes] = await Promise.all([
           api.get("/products"),
-          api.get("/products/categories").catch(() => ({ data: [] })), // Safety catch
+          api.get("/products/categories").catch(() => ({ data: [] })),
         ]);
 
+        // Standardizing product data structure
         const prodData = Array.isArray(productsRes.data)
           ? productsRes.data
           : productsRes.data.data || [];
         setProducts(prodData);
 
+        // Standardizing category data structure
         const catData = Array.isArray(categoriesRes.data)
           ? categoriesRes.data
-          : [];
+          : categoriesRes.data.data || [];
         setCategories(catData);
       } catch (err) {
         console.error("Failed to fetch data", err);
@@ -38,6 +41,8 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-white text-gray-900">
+      {/* NAVIGATION: Rendered here so it shows on top */}
+
       {/* Attractive Hero Section */}
       <section className="relative bg-gradient-to-br from-orange-600 via-orange-500 to-red-600 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
@@ -75,6 +80,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+
         {/* Curved Divider */}
         <div className="absolute bottom-0 w-full overflow-hidden leading-[0]">
           <svg
@@ -98,7 +104,7 @@ export default function HomePage() {
           </h2>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6">
-          {(categories.length > 0
+          {(categories && categories.length > 0
             ? categories
             : [
                 { id: 1, name: "Electronics", icon: "📱" },
@@ -110,8 +116,8 @@ export default function HomePage() {
               ]
           ).map((category) => (
             <Link
-              key={category.id}
-              href={`/search?category=${category.id}`}
+              key={category.id || category._id}
+              href={`/search?category=${category.name}`}
               className="group bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-orange-500 hover:shadow-lg hover:-translate-y-1 transition-all text-center">
               <div className="text-4xl md:text-5xl mb-3 group-hover:scale-110 transition-transform">
                 {category.icon || "📦"}
@@ -124,7 +130,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Featured Products with Visibility Fix */}
+      {/* Featured Products */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 md:gap-0 mb-12">
           <div>
@@ -156,7 +162,6 @@ export default function HomePage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* FIXED: The ProductCard is now properly mapped and returned here */}
             {products.slice(0, 8).map((product) => (
               <ProductCard key={product.id || product._id} product={product} />
             ))}
@@ -185,7 +190,9 @@ export default function HomePage() {
                   <p className="text-xs font-bold text-orange-400 mb-1">
                     SAVE BIG
                   </p>
-                  <p className="text-sm font-bold truncate">{p.name}</p>
+                  <p className="text-sm font-bold truncate">
+                    {p.name || p.title}
+                  </p>
                 </div>
               ))}
               <Link
@@ -256,10 +263,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="border-t border-gray-800 pt-8 text-center text-sm">
-            <p>
-              &copy; 2026 OrderCard Inc. All rights reserved. Premium Shopping
-              Made Simple.
-            </p>
+            <p>&copy; 2026 OrderCard Inc. All rights reserved.</p>
           </div>
         </div>
       </footer>

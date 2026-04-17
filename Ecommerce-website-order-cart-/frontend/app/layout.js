@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { CartProvider } from '@/context/CartContext';
+import { CartProvider } from "@/context/CartContext";
 import Navbar from "@/components/Navbar";
 
 const geistSans = Geist({
@@ -21,13 +21,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 text-gray-900`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 text-gray-900`}>
         {/* We wrap everything in CartProvider so the Navbar AND the pages can see the cart */}
         <CartProvider>
           <Navbar />
-          <main>
-            {children}
-          </main>
+          <main>{children}</main>
         </CartProvider>
       </body>
     </html>
