@@ -5,9 +5,10 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "build": "echo 'No build required'",
+    "build": "npx prisma generate --schema=../prisma/schema.prisma || true",
     "test": "echo 'No tests'",
-    "prestart": "cd ../prisma && npx prisma generate || true"
+    "postinstall": "npm run build",
+    "prestart": "true"
   },
   "keywords": [],
   "author": "",
