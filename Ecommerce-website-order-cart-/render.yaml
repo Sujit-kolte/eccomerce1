@@ -2,7 +2,9 @@ services:
   - type: web
     name: ecommerce-backend
     runtime: node
-    buildCommand: ./render-build.sh
+    plan: free
+    rootDir: ./
+    buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: NODE_ENV
