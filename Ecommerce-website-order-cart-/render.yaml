@@ -3,7 +3,7 @@ services:
     name: ecommerce-backend
     runtime: node
     plan: free
-    rootDir: ./
+    rootDir: /
     buildCommand: npm install
     startCommand: npm start
     envVars:
